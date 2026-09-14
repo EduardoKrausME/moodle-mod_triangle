@@ -1,0 +1,168 @@
+.mod-triangle-calculator {
+    max-width: 920px;
+    margin: 0 auto;
+}
+
+.mod-triangle-calculator .triangle-toolbar {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+}
+
+.mod-triangle-calculator .triangle-hint {
+    margin: 0;
+}
+
+.mod-triangle-calculator .triangle-stage {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 11;
+    min-height: 330px;
+    overflow: hidden;
+    border: 1px solid #d7dce1;
+    border-radius: 12px;
+    background: #fff;
+}
+
+.mod-triangle-calculator .triangle-svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.mod-triangle-calculator .triangle-shape {
+    fill: rgba(15, 98, 254, 0.06);
+    stroke: currentColor;
+    stroke-width: 3;
+    vector-effect: non-scaling-stroke;
+}
+
+.mod-triangle-calculator .triangle-vertex {
+    fill: currentColor;
+}
+
+.mod-triangle-calculator .triangle-point-label {
+    font-size: 20px;
+    font-weight: 700;
+    text-anchor: middle;
+    dominant-baseline: middle;
+}
+
+.mod-triangle-calculator .triangle-side-input,
+.mod-triangle-calculator .triangle-angle-input {
+    position: absolute;
+    z-index: 2;
+    margin: 0;
+}
+
+.mod-triangle-calculator .triangle-side-input {
+    transform-origin: center center;
+}
+
+.mod-triangle-calculator .triangle-side {
+    width: 100%;
+    min-width: 64px;
+    height: 34px;
+    padding: 0.2rem 0.5rem;
+    text-align: center;
+    font-weight: 600;
+    background: rgba(255, 255, 255, 0.96);
+}
+
+.mod-triangle-calculator .triangle-angle-input {
+    display: flex;
+    align-items: center;
+    gap: 0.2rem;
+    width: 112px;
+    padding: 0.2rem 0.35rem;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.95);
+}
+
+.mod-triangle-calculator .triangle-angle-name {
+    font-weight: 700;
+}
+
+.mod-triangle-calculator .triangle-angle {
+    width: 68px;
+    height: 34px;
+    padding: 0.2rem 0.35rem;
+    text-align: right;
+}
+
+.mod-triangle-calculator .triangle-degree {
+    font-weight: 700;
+}
+
+.mod-triangle-calculator .triangle-input.triangle-calculated {
+    border-style: dashed;
+}
+
+.mod-triangle-calculator .triangle-input:invalid {
+    border-color: #d43f3a;
+}
+
+.mod-triangle-calculator .triangle-message {
+    margin-top: 1rem;
+}
+
+.mod-triangle-calculator .triangle-output {
+    margin-top: 1.5rem;
+}
+
+.mod-triangle-calculator .triangle-results {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+}
+
+.mod-triangle-calculator .triangle-result-card {
+    padding: 0.8rem 1rem;
+    border: 1px solid #d7dce1;
+    border-radius: 10px;
+    background: #fff;
+}
+
+.mod-triangle-calculator .triangle-result-label {
+    display: block;
+    font-size: 0.82rem;
+    opacity: 0.75;
+}
+
+.mod-triangle-calculator .triangle-result-value {
+    display: block;
+    font-size: 1.2rem;
+    font-weight: 700;
+}
+
+.mod-triangle-calculator .triangle-calculations {
+    overflow-wrap: anywhere;
+}
+
+.mod-triangle-calculator .triangle-calculation-row {
+    padding: 0.55rem 0;
+    border-bottom: 1px solid #eceff2;
+}
+
+.mod-triangle-calculator .triangle-calculation-row:last-child {
+    border-bottom: 0;
+}
+
+@media (max-width: 620px) {
+    .mod-triangle-calculator .triangle-stage {
+        min-height: 280px;
+    }
+
+    .mod-triangle-calculator .triangle-angle-input {
+        width: 96px;
+        font-size: 0.85rem;
+    }
+
+    .mod-triangle-calculator .triangle-angle {
+        width: 56px;
+    }
+}

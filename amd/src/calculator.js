@@ -22,7 +22,7 @@
  */
 
 /* eslint-disable no-mixed-operators */
-define([], function() {
+define([], function () {
     const EPS = 0.000001;
     const ANGLE_EPS = 0.01;
     const SIDE_LIMIT = 1000000000000;

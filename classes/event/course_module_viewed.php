@@ -24,8 +24,6 @@
 
 namespace mod_triangle\event;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Event triggered when the triangle calculator is viewed.
  */

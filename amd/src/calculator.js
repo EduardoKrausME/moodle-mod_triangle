@@ -22,7 +22,7 @@
  */
 
 /* eslint-disable no-mixed-operators */
-define([], function () {
+define(["core/templates", "core/notification"], function (Templates, Notification) {
     const EPS = 0.000001;
     const ANGLE_EPS = 0.01;
     const SIDE_LIMIT = 1000000000000;
@@ -331,22 +331,24 @@ define([], function () {
         placeAngleInput(root, ".angle-c-wrap", C, centroid, width, height);
     };
 
-    const triangleType = triangle => {
+    const triangleType = (triangle, strings) => {
         const sides = [triangle.a, triangle.b, triangle.c].sort((a, b) => a - b);
-        let bySides = "escaleno";
+        let bySides = strings.scalene;
         if (Math.abs(sides[0] - sides[2]) < 0.00001) {
-            bySides = "equilátero";
+            bySides = strings.equilateral;
         } else if (Math.abs(sides[0] - sides[1]) < 0.00001 || Math.abs(sides[1] - sides[2]) < 0.00001) {
-            bySides = "isósceles";
+            bySides = strings.isosceles;
         }
         const maxAngle = Math.max(triangle.A, triangle.B, triangle.C);
-        const byAngles = Math.abs(maxAngle - 90) < 0.0001 ? "retângulo" : maxAngle > 90 ? "obtusângulo" : "acutângulo";
+        const byAngles = Math.abs(maxAngle - 90) < 0.0001 ?
+            strings.right : maxAngle > 90 ? strings.obtuse : strings.acute;
         return `${bySides}, ${byAngles}`;
     };
 
-    const renderResults = (root, triangle, solutionsCount) => {
+    const renderResults = (root, triangle, solutionsCount, strings) => {
         const semiperimeter = (triangle.a + triangle.b + triangle.c) / 2;
-        const areaSquared = semiperimeter * (semiperimeter - triangle.a) * (semiperimeter - triangle.b) * (semiperimeter - triangle.c);
+        const areaSquared = semiperimeter * (semiperimeter - triangle.a) *
+            (semiperimeter - triangle.b) * (semiperimeter - triangle.c);
         const area = Math.sqrt(Math.max(0, areaSquared));
         const perimeter = triangle.a + triangle.b + triangle.c;
         const heights = {
@@ -358,40 +360,55 @@ define([], function () {
         const inradius = area / semiperimeter;
 
         const cards = [
-            ["Lado a", fmt(triangle.a)], ["Lado b", fmt(triangle.b)], ["Lado c", fmt(triangle.c)],
-            ["Ângulo A", `${fmt(triangle.A)}°`], ["Ângulo B", `${fmt(triangle.B)}°`], ["Ângulo C", `${fmt(triangle.C)}°`],
-            ["Perímetro", fmt(perimeter)], ["Semiperímetro", fmt(semiperimeter)], ["Área", fmt(area)],
-            ["Altura hₐ", fmt(heights.ha)], ["Altura hᵦ", fmt(heights.hb)], ["Altura h꜀", fmt(heights.hc)],
-            ["Raio inscrito", fmt(inradius)], ["Raio circunscrito", fmt(circumradius)], ["Classificação", triangleType(triangle)],
+            {label: strings.sidea, value: fmt(triangle.a)},
+            {label: strings.sideb, value: fmt(triangle.b)},
+            {label: strings.sidec, value: fmt(triangle.c)},
+            {label: strings.anglea, value: `${fmt(triangle.A)}°`},
+            {label: strings.angleb, value: `${fmt(triangle.B)}°`},
+            {label: strings.anglec, value: `${fmt(triangle.C)}°`},
+            {label: strings.perimeter, value: fmt(perimeter)},
+            {label: strings.semiperimeter, value: fmt(semiperimeter)},
+            {label: strings.area, value: fmt(area)},
+            {label: strings.heighta, value: fmt(heights.ha)},
+            {label: strings.heightb, value: fmt(heights.hb)},
+            {label: strings.heightc, value: fmt(heights.hc)},
+            {label: strings.inradius, value: fmt(inradius)},
+            {label: strings.circumradius, value: fmt(circumradius)},
+            {label: strings.classification, value: triangleType(triangle, strings)},
         ];
-        root.querySelector(".triangle-results").innerHTML = cards.map(item =>
-            `<div class="triangle-result-card"><span class="triangle-result-label">${item[0]}</span>` +
-            `<span class="triangle-result-value">${item[1]}</span></div>`
-        ).join("");
 
         const calculations = [
-            `Soma dos ângulos: ${fmt(triangle.A)}° + ${fmt(triangle.B)}° + ${fmt(triangle.C)}° = 180°`,
-            `Perímetro: P = a + b + c = ${fmt(triangle.a)} + ${fmt(triangle.b)} + ${fmt(triangle.c)} = ${fmt(perimeter)}`,
-            `Semiperímetro: s = P / 2 = ${fmt(perimeter)} / 2 = ${fmt(semiperimeter)}`,
-            `Heron: área = √[s(s-a)(s-b)(s-c)] = ${fmt(area)}`,
-            `Lei dos senos: a/sen(A) = b/sen(B) = c/sen(C) = ${fmt(2 * circumradius)}`,
-            `Lei dos cossenos: a² = b² + c² - 2bc·cos(A)`,
-            `hₐ = 2·área/a = ${fmt(heights.ha)}; hᵦ = ${fmt(heights.hb)}; h꜀ = ${fmt(heights.hc)}`,
-            `r = área/s = ${fmt(inradius)}; R = a/[2·sen(A)] = ${fmt(circumradius)}`,
+            `${strings.anglesum}: ${fmt(triangle.A)}° + ${fmt(triangle.B)}° + ${fmt(triangle.C)}° = 180°`,
+            `${strings.perimeter}: P = a + b + c = ${fmt(triangle.a)} + ${fmt(triangle.b)} + ${fmt(triangle.c)} = ${fmt(perimeter)}`,
+            `${strings.semiperimeter}: s = P / 2 = ${fmt(perimeter)} / 2 = ${fmt(semiperimeter)}`,
+            `${strings.heron}: ${strings.area} = √[s(s-a)(s-b)(s-c)] = ${fmt(area)}`,
+            `${strings.lawofsines}: a/sin(A) = b/sin(B) = c/sin(C) = ${fmt(2 * circumradius)}`,
+            `${strings.lawofcosines}: a² = b² + c² - 2bc·cos(A)`,
+            `hₐ = 2·${strings.area}/a = ${fmt(heights.ha)}; hᵦ = ${fmt(heights.hb)}; h꜀ = ${fmt(heights.hc)}`,
+            `r = ${strings.area}/s = ${fmt(inradius)}; R = a/[2·sin(A)] = ${fmt(circumradius)}`,
         ];
         if (solutionsCount > 1) {
-            calculations.unshift(`Caso ambíguo SSA: existem ${solutionsCount} triângulos compatíveis. Os campos mostram a primeira solução.`);
+            calculations.unshift(strings.ssaambiguous.replace("__COUNT__", String(solutionsCount)));
         }
-        root.querySelector(".triangle-calculations").innerHTML = calculations.map(text =>
-            `<div class="triangle-calculation-row">${text}</div>`
-        ).join("");
-        root.querySelector(".triangle-output").hidden = false;
+
+        const context = {
+            resultstitle: strings.results,
+            calculationstitle: strings.calculations,
+            cards,
+            calculationrows: calculations.map(text => ({text})),
+        };
+
+        Templates.renderForPromise("mod_triangle/results", context)
+            .then(({html, js: templatejs}) => {
+                Templates.replaceNodeContents(root.querySelector(".triangle-rendered"), html, templatejs);
+                root.querySelector(".triangle-output").hidden = false;
+            })
+            .catch(Notification.exception);
     };
 
     const hideResults = root => {
         root.querySelector(".triangle-output").hidden = true;
-        root.querySelector(".triangle-results").innerHTML = "";
-        root.querySelector(".triangle-calculations").innerHTML = "";
+        root.querySelector(".triangle-rendered").textContent = "";
     };
 
     const setMessage = (root, text, type) => {
@@ -400,7 +417,7 @@ define([], function () {
         message.className = `triangle-message alert alert-${type}`;
     };
 
-    const recalculate = (root, manual) => {
+    const recalculate = (root, manual, strings) => {
         updateBounds(root, manual);
         const known = getKnown(root, manual);
         const knownFields = FIELDS.filter(field => Number.isFinite(known[field]));
@@ -421,7 +438,7 @@ define([], function () {
         if (invalidNative) {
             clearComputedValues(root, manual);
             hideResults(root);
-            setMessage(root, "Há um valor fora do intervalo permitido. Confira os limites mínimo e máximo do campo.", "danger");
+            setMessage(root, strings.invalidrange, "danger");
             return;
         }
 
@@ -429,20 +446,21 @@ define([], function () {
         if (!solutions.length) {
             clearComputedValues(root, manual);
             hideResults(root);
-            setMessage(root, "As medidas informadas não formam um triângulo válido ou são incompatíveis entre si.", "danger");
+            setMessage(root, strings.invalidtriangle, "danger");
             return;
         }
 
         const triangle = solutions[0];
         setComputedValues(root, manual, triangle);
         drawTriangle(root, triangle);
-        renderResults(root, triangle, solutions.length);
-        setMessage(root, solutions.length > 1 ?
-            `Triângulo calculado. Há ${solutions.length} soluções possíveis para estas medidas.` :
-            `Triângulo calculado por ${triangle.method}.`, "success");
+        renderResults(root, triangle, solutions.length, strings);
+        const success = solutions.length > 1 ?
+            strings.successmultiple.replace("__COUNT__", String(solutions.length)) :
+            strings.successmethod.replace("__METHOD__", triangle.method);
+        setMessage(root, success, "success");
     };
 
-    const init = id => {
+    const init = (id, strings) => {
         const root = document.getElementById(id);
         if (!root) {
             return;
@@ -455,7 +473,7 @@ define([], function () {
                 const field = input.dataset.field;
                 manual[field] = input.value.trim() !== "";
                 input.classList.remove("triangle-calculated");
-                recalculate(root, manual);
+                recalculate(root, manual, strings);
             });
         });
 
@@ -466,7 +484,7 @@ define([], function () {
                 input.value = "";
                 input.classList.remove("triangle-calculated");
             });
-            recalculate(root, manual);
+            recalculate(root, manual, strings);
         });
 
         drawTriangle(root, null);

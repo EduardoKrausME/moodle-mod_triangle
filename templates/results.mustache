@@ -1,0 +1,47 @@
+{{!
+    This file is part of Moodle - https://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template mod_triangle/results
+
+    Example context (json):
+    {
+        "resultstitle": "Results",
+        "calculationstitle": "Calculations",
+        "cards": [
+            {"label": "Side a", "value": "3"}
+        ],
+        "calculationrows": [
+            {"text": "Perimeter: P = a + b + c = 12"}
+        ]
+    }
+}}
+<h3>{{resultstitle}}</h3>
+<div class="triangle-results">
+    {{#cards}}
+        <div class="triangle-result-card">
+            <span class="triangle-result-label">{{label}}</span>
+            <span class="triangle-result-value">{{value}}</span>
+        </div>
+    {{/cards}}
+</div>
+
+<h3>{{calculationstitle}}</h3>
+<div class="triangle-calculations">
+    {{#calculationrows}}
+        <div class="triangle-calculation-row">{{text}}</div>
+    {{/calculationrows}}
+</div>

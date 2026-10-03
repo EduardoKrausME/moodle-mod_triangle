@@ -19,7 +19,16 @@
 
     Example context (json):
     {
-        Aqui tem que criar o context em inglês
+        "id": "triangle-calculator-42",
+        "sidea": "Side a",
+        "sideb": "Side b",
+        "sidec": "Side c",
+        "anglea": "Angle A",
+        "angleb": "Angle B",
+        "anglec": "Angle C",
+        "hint": "Enter enough known measurements.",
+        "waiting": "Enter enough compatible measurements to calculate the triangle.",
+        "clear": "Clear"
     }
 }}
 <div id="{{id}}" class="mod-triangle-calculator" data-waiting="{{waiting}}">
@@ -28,8 +37,9 @@
         <button type="button" class="btn btn-secondary triangle-clear">{{clear}}</button>
     </div>
 
-    <div class="triangle-stage" aria-label="Calculadora geométrica de triângulo">
-        <svg class="triangle-svg" viewBox="0 0 640 440" role="img" aria-label="Triângulo calculado">
+    <div class="triangle-stage" aria-label="{{#str}}trianglecalculatoraria, mod_triangle{{/str}}">
+        <svg class="triangle-svg" viewBox="0 0 640 440" role="img"
+             aria-label="{{#str}}calculatedtrianglearia, mod_triangle{{/str}}">
             <polygon class="triangle-shape" points="110,350 530,350 320,80"></polygon>
             <circle class="triangle-vertex triangle-vertex-a" cx="110" cy="350" r="5"></circle>
             <circle class="triangle-vertex triangle-vertex-b" cx="530" cy="350" r="5"></circle>
@@ -78,9 +88,6 @@
     <div class="triangle-message alert alert-info" role="status">{{waiting}}</div>
 
     <div class="triangle-output" hidden>
-        <h3>{{results}}</h3>
-        <div class="triangle-results"></div>
-        <h3>{{calculations}}</h3>
-        <div class="triangle-calculations"></div>
+        <div class="triangle-rendered"></div>
     </div>
 </div>

@@ -33,6 +33,14 @@ require_login($course, true, $cm);
 $context = context_module::instance($cm->id);
 require_capability("mod/triangle:view", $context);
 
+$event = \mod_triangle\event\course_module_viewed::create([
+    "objectid" => $triangle->id,
+    "context" => $context,
+]);
+$event->add_record_snapshot("course", $course);
+$event->add_record_snapshot("triangle", $triangle);
+$event->trigger();
+
 $PAGE->set_url("/mod/triangle/view.php", ["id" => $cm->id]);
 $PAGE->set_title(format_string($triangle->name));
 $PAGE->set_heading(format_string($course->fullname));
@@ -41,7 +49,46 @@ $PAGE->set_context($context);
 $completion = new completion_info($course);
 $completion->set_module_viewed($cm);
 
-$PAGE->requires->js_call_amd("mod_triangle/calculator", "init", ["triangle-calculator-{$cm->id}"]);
+$jsstrings = [
+    "sidea" => get_string("sidea", "mod_triangle"),
+    "sideb" => get_string("sideb", "mod_triangle"),
+    "sidec" => get_string("sidec", "mod_triangle"),
+    "anglea" => get_string("anglea", "mod_triangle"),
+    "angleb" => get_string("angleb", "mod_triangle"),
+    "anglec" => get_string("anglec", "mod_triangle"),
+    "perimeter" => get_string("perimeter", "mod_triangle"),
+    "semiperimeter" => get_string("semiperimeter", "mod_triangle"),
+    "area" => get_string("area", "mod_triangle"),
+    "heighta" => get_string("heighta", "mod_triangle"),
+    "heightb" => get_string("heightb", "mod_triangle"),
+    "heightc" => get_string("heightc", "mod_triangle"),
+    "inradius" => get_string("inradius", "mod_triangle"),
+    "circumradius" => get_string("circumradius", "mod_triangle"),
+    "classification" => get_string("classification", "mod_triangle"),
+    "scalene" => get_string("scalene", "mod_triangle"),
+    "equilateral" => get_string("equilateral", "mod_triangle"),
+    "isosceles" => get_string("isosceles", "mod_triangle"),
+    "right" => get_string("right", "mod_triangle"),
+    "obtuse" => get_string("obtuse", "mod_triangle"),
+    "acute" => get_string("acute", "mod_triangle"),
+    "anglesum" => get_string("anglesum", "mod_triangle"),
+    "heron" => get_string("heron", "mod_triangle"),
+    "lawofsines" => get_string("lawofsines", "mod_triangle"),
+    "lawofcosines" => get_string("lawofcosines", "mod_triangle"),
+    "ssaambiguous" => get_string("ssaambiguous", "mod_triangle", "__COUNT__"),
+    "invalidrange" => get_string("invalidrange", "mod_triangle"),
+    "invalidtriangle" => get_string("invalidtriangle", "mod_triangle"),
+    "successmultiple" => get_string("successmultiple", "mod_triangle", "__COUNT__"),
+    "successmethod" => get_string("successmethod", "mod_triangle", "__METHOD__"),
+    "results" => get_string("results", "mod_triangle"),
+    "calculations" => get_string("calculations", "mod_triangle"),
+];
+
+$PAGE->requires->js_call_amd(
+    "mod_triangle/calculator",
+    "init",
+    ["triangle-calculator-{$cm->id}", $jsstrings]
+);
 
 $data = [
     "id" => "triangle-calculator-{$cm->id}",

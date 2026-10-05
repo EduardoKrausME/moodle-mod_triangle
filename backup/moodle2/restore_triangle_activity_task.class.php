@@ -24,7 +24,7 @@
  */
 
 defined('MOODLE_INTERNAL') || die;
-require_once($CFG->dirroot . '/mod/triangle/backup/moodle2/restore_triangle_stepslib.php');
+require_once(__DIR__ . '/restore_triangle_stepslib.php');
 
 /**
  * Provides the settings and steps to restore one triangle calculator activity.
@@ -35,7 +35,7 @@ class restore_triangle_activity_task extends restore_activity_task {
      *
      * @return void
      */
-    protected function define_my_settings() {
+    protected function define_my_settings(): void {
     }
 
     /**
@@ -43,7 +43,7 @@ class restore_triangle_activity_task extends restore_activity_task {
      *
      * @return void
      */
-    protected function define_my_steps() {
+    protected function define_my_steps(): void {
         $this->add_step(new restore_triangle_activity_structure_step('triangle_structure', 'triangle.xml'));
     }
 
@@ -52,7 +52,7 @@ class restore_triangle_activity_task extends restore_activity_task {
      *
      * @return restore_decode_content[]
      */
-    public static function define_decode_contents() {
+    public static function define_decode_contents(): array {
         return [
             new restore_decode_content('triangle', ['intro'], 'triangle'),
         ];
@@ -63,7 +63,7 @@ class restore_triangle_activity_task extends restore_activity_task {
      *
      * @return restore_decode_rule[]
      */
-    public static function define_decode_rules() {
+    public static function define_decode_rules(): array {
         return [
             new restore_decode_rule('TRIANGLEVIEWBYID', '/mod/triangle/view.php?id=$1', 'course_module'),
             new restore_decode_rule('TRIANGLEINDEX', '/mod/triangle/index.php?id=$1', 'course'),
@@ -75,7 +75,7 @@ class restore_triangle_activity_task extends restore_activity_task {
      *
      * @return restore_log_rule[]
      */
-    public static function define_restore_log_rules() {
+    public static function define_restore_log_rules(): array {
         return [
             new restore_log_rule('triangle', 'view', 'view.php?id={course_module}', '{triangle}'),
         ];
@@ -86,7 +86,7 @@ class restore_triangle_activity_task extends restore_activity_task {
      *
      * @return restore_log_rule[]
      */
-    public static function define_restore_log_rules_for_course() {
+    public static function define_restore_log_rules_for_course(): array {
         return [
             new restore_log_rule('triangle', 'view all', 'index.php?id={course}', null),
         ];
